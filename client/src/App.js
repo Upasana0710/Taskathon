@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Switch, Route, redirect, useLocation } from "react-router-dom";
 import { darkTheme, lightTheme } from "./utils/Theme";
+import './App.css';
 import Navbar from "./components/Navbar";
 import Menu from "./components/Menu";
 import Login from "./components/Login";
+import ForgotPassword from "./components/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
+import ResetPassword from "./pages/ResetPassword";
+import Tasks from "./pages/Tasks";
+import AuthContextProvider from "./contexts/AuthContext";
+import {useAuth} from './contexts/AuthContext'
 
-const Trackminster = styled.div`
+const Taskathon = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -16,28 +22,79 @@ const Trackminster = styled.div`
   overflow-y: hidden;
   overflow-x: hidden;
 `;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
-  const [signUpOpen, setSignUpOpen] = useState(false);
-  useEffect(() => {
-    console.log(signUpOpen);
-  });
+  const [signUpOpen, setSignUpOpen] = useState(true);
+  const [forgotPassword, setForgotPassword] = useState(false);
+  const { currentUser } = useAuth()
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <AuthContextProvider>
       <BrowserRouter>
-        <Trackminster>
-          <Menu darkMode={darkMode} setDarkMode={setDarkMode} />
-          <Navbar setSignUpOpen={setSignUpOpen} />
-          <Login signUpOpen={signUpOpen} setSignUpOpen={setSignUpOpen} />
-          <Routes>
-            <Route path="/" exact element={<Dashboard />} />
-          </Routes>
-        </Trackminster>
+        {currentUser?
+          <Taskathon>
+            <Menu darkMode={darkMode} setDarkMode={setDarkMode} />
+            <Container>
+              <Navbar setSignUpOpen={setSignUpOpen} />
+              <Routes>
+                <Route path="/" exact element={<Dashboard />} />
+                <Route path="/tasks" exact element={<Tasks />} />
+              </Routes>
+            </Container>
+          </Taskathon>
+        :
+        <Taskathon>
+          <Container>
+            <ForgotPassword forgotPassword={forgotPassword} setForgotPassword={setForgotPassword}/>
+            <Routes>
+              <Route path="/" exact element={<Login signUpOpen={signUpOpen} setSignUpOpen={setSignUpOpen} forgotPassword={forgotPassword} setForgotPassword={setForgotPassword}/>} />
+              <Route path="/resetpassword" exact element={<ResetPassword />} />
+            </Routes>
+          </Container>
+        </Taskathon>
+        }
       </BrowserRouter>
+      </AuthContextProvider>
     </ThemeProvider>
   );
 }
 
 export default App;
+
+function ProtectedRoute(props) {
+  const { currentUser } = useAuth()
+  const { path } = props
+  console.log('path', path)
+  const location = useLocation()
+  console.log('location state', location.state)
+
+  // if (
+  //   path === '/login' ||
+  //   path === '/register' ||
+  //   path === '/forgot-password' ||
+  //   path === '/reset-password'
+  // ) {
+  //   return currentUser ? (
+  //     <redirect to={location.state?.from ?? '/profile'} />
+  //   ) : (
+  //     <Route {...props} />
+  //   )
+  // }
+  return currentUser ? (
+    <Route {...props} />
+  ) : (
+    <redirect
+      to={{
+        pathname: '/login',
+        state: { from: path },
+      }}
+    />
+  )
+}
 
