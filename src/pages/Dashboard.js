@@ -13,6 +13,11 @@ const DashboardContainer = styled.div`
   display: flex;
   flex: wrap;
   justify-content: center;
+  @media (max-width: 1100px) {
+    align-items: center;
+    overflow-y: scroll;
+    padding: 20px 0px;
+  }
 `;
 const Get = styled.div`
   width: 100%;
@@ -20,8 +25,12 @@ const Get = styled.div`
   flex-wrap: wrap;
   gap: 20px;
   display: flex;
-  justify-content: flex-start;
   justify-content: center;
+  @media (max-width: 1100px) {
+    align-items: center;
+    padding: 20px 0px;
+    
+  }
 `;
 const Update = styled.div`
   width: 100%;

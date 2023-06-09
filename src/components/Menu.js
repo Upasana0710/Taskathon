@@ -3,6 +3,7 @@ import styled from "styled-components";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import { Link } from 'react-router-dom';
 
 const MenuContainer = styled.div`
@@ -49,13 +50,24 @@ text-align: center;
 width: 100%;
 margin-bottom: 18px;
 `;
+const Close = styled.div`
+display: none;
+@media (max-width: 1100px) {
+  display: block;
+
+}
+`;
+
 // eslint-disable-next-line react/prop-types
-const Menu = ({ darkMode, setDarkMode }) => {
+const Menu = ({ darkMode, setDarkMode, setMenuOpen }) => {
   return (
     <MenuContainer>
       <Name>
         TASKATHON
       </Name>
+      <Close>
+        <MenuOutlinedIcon onClick={() => setMenuOpen(false)} style={{ cursor: "pointer" }} />
+      </Close>
       <Link to="/createtask" style={{ textDecoration: "none", width: "100%" }}>
         <Elements>
           <AddCircleOutlineIcon />

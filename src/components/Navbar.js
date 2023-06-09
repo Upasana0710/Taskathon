@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { useAuth } from '../contexts/AuthContext'
+import MenuIcon from "@mui/icons-material/Menu";
+import { IconButton } from "@mui/material";
 
 const Navcontainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   width: 100%;
   height: 60px;
   padding: 16px 40px;
@@ -32,15 +34,21 @@ const Button = styled.div`
     padding: 16px;
   }
 `;
+const IcoButton = styled(IconButton)`
+  color: ${({ theme }) => theme.text_secondary} !important;
+
+`;
 const Content = styled.div``;
-const Navbar = ({ setSignUpOpen }) => {
+const Navbar = ({ menuOpen, setMenuOpen, setSignUpOpen }) => {
   const { currentUser, logout } = useAuth()
   const handleLogout = () => {
     logout();
   }
   return (
     <Navcontainer>
-      
+      <IcoButton onClick={() => setMenuOpen(!menuOpen)}>
+        <MenuIcon />
+      </IcoButton>
         {currentUser ? 
           <Button onClick={()=>handleLogout()}>
             <Content>Logout</Content>

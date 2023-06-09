@@ -28,9 +28,23 @@ const Container = styled.div`
 `;
 
 function App() {
+  const [menuOpen, setMenuOpen] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
   const [signUpOpen, setSignUpOpen] = useState(true);
   const { currentUser } = useAuth();
+
+  useEffect(() => {
+    const resize = () => {
+      if (window.innerWidth < 1110) {
+        setMenuOpen(false);
+      } else {
+        setMenuOpen(true);
+      }
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, []);
 
   useEffect(() => {
     console.log("The user is", currentUser);
@@ -41,9 +55,9 @@ function App() {
       <BrowserRouter>
         {currentUser ? (
           <Taskathon>
-            <Menu darkMode={darkMode} setDarkMode={setDarkMode} />
+            <Menu setMenuOpen={setMenuOpen} darkMode={darkMode} setDarkMode={setDarkMode} />
             <Container>
-              <Navbar setSignUpOpen={setSignUpOpen} />
+              <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} setSignUpOpen={setSignUpOpen} />
               <Routes>
                 <Route path="/" exact element={<Dashboard />} />
                 <Route path="/createtask" exact element={<CreateTask />} />
