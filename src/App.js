@@ -9,9 +9,7 @@ import Login from "./components/Login";
 import ForgotPassword from "./components/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
 import ResetPassword from "./pages/ResetPassword";
-import Tasks from "./pages/Tasks";
 import CreateTask from "./pages/CreateTask";
-import AuthContextProvider from "./contexts/AuthContext";
 import { useAuth } from "./contexts/AuthContext";
 
 const Taskathon = styled.div`
@@ -48,7 +46,6 @@ function App() {
               <Navbar setSignUpOpen={setSignUpOpen} />
               <Routes>
                 <Route path="/" exact element={<Dashboard />} />
-                <Route path="/tasks" exact element={<Tasks />} />
                 <Route path="/createtask" exact element={<CreateTask />} />
               </Routes>
             </Container>
