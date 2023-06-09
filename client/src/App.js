@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
-import { BrowserRouter, Routes, Switch, Route, redirect, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { darkTheme, lightTheme } from "./utils/Theme";
-import './App.css';
+import "./App.css";
 import Navbar from "./components/Navbar";
 import Menu from "./components/Menu";
 import Login from "./components/Login";
@@ -10,8 +10,9 @@ import ForgotPassword from "./components/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
 import ResetPassword from "./pages/ResetPassword";
 import Tasks from "./pages/Tasks";
+import CreateTask from "./pages/CreateTask";
 import AuthContextProvider from "./contexts/AuthContext";
-import {useAuth} from './contexts/AuthContext'
+import { useAuth } from "./contexts/AuthContext";
 
 const Taskathon = styled.div`
   display: flex;
@@ -20,7 +21,7 @@ const Taskathon = styled.div`
   height: 100vh;
   background: ${({ theme }) => theme.bgLight};
   overflow-y: hidden;
-  overflow-x: hidden;
+  overflow-x: scroll;
 `;
 const Container = styled.div`
   display: flex;
@@ -31,13 +32,16 @@ const Container = styled.div`
 function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [signUpOpen, setSignUpOpen] = useState(true);
-  const [forgotPassword, setForgotPassword] = useState(false);
-  const { currentUser } = useAuth()
+  const { currentUser } = useAuth();
+
+  useEffect(() => {
+    console.log("The user is", currentUser);
+  }, [currentUser]);
+
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-      <AuthContextProvider>
       <BrowserRouter>
-        {currentUser?
+        {currentUser ? (
           <Taskathon>
             <Menu darkMode={darkMode} setDarkMode={setDarkMode} />
             <Container>
@@ -45,22 +49,35 @@ function App() {
               <Routes>
                 <Route path="/" exact element={<Dashboard />} />
                 <Route path="/tasks" exact element={<Tasks />} />
+                <Route path="/createtask" exact element={<CreateTask />} />
               </Routes>
             </Container>
           </Taskathon>
-        :
-        <Taskathon>
-          <Container>
-            <ForgotPassword forgotPassword={forgotPassword} setForgotPassword={setForgotPassword}/>
-            <Routes>
-              <Route path="/" exact element={<Login signUpOpen={signUpOpen} setSignUpOpen={setSignUpOpen} forgotPassword={forgotPassword} setForgotPassword={setForgotPassword}/>} />
-              <Route path="/resetpassword" exact element={<ResetPassword />} />
-            </Routes>
-          </Container>
-        </Taskathon>
-        }
+        ) : (
+          <Taskathon>
+            <Container>
+              <Routes>
+                <Route
+                  path="/"
+                  exact
+                  element={
+                    <Login
+                      signUpOpen={signUpOpen}
+                      setSignUpOpen={setSignUpOpen}
+                    />
+                  }
+                />
+                <Route path="/forgotpassword" element={<ForgotPassword />} />
+                <Route
+                  path="/resetpassword"
+                  exact
+                  element={<ResetPassword />}
+                />
+              </Routes>
+            </Container>
+          </Taskathon>
+        )}
       </BrowserRouter>
-      </AuthContextProvider>
     </ThemeProvider>
   );
 }
@@ -68,11 +85,11 @@ function App() {
 export default App;
 
 function ProtectedRoute(props) {
-  const { currentUser } = useAuth()
-  const { path } = props
-  console.log('path', path)
-  const location = useLocation()
-  console.log('location state', location.state)
+  const { currentUser } = useAuth();
+  const { path } = props;
+  console.log("path", path);
+  const location = useLocation();
+  console.log("location state", location.state);
 
   // if (
   //   path === '/login' ||
@@ -91,10 +108,9 @@ function ProtectedRoute(props) {
   ) : (
     <redirect
       to={{
-        pathname: '/login',
+        pathname: "/login",
         state: { from: path },
       }}
     />
-  )
+  );
 }
-
