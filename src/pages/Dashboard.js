@@ -12,14 +12,16 @@ const DashboardContainer = styled.div`
   padding: 20px;
   display: flex;
   flex: wrap;
+  justify-content: center;
 `;
 const Get = styled.div`
   width: 100%;
   padding: 20px;
-  flex: wrap;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 20px;
   display: flex;
   justify-content: flex-start;
+  justify-content: center;
 `;
 const Update = styled.div`
   width: 100%;
