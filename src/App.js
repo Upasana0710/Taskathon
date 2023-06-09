@@ -55,7 +55,7 @@ function App() {
       <BrowserRouter>
         {currentUser ? (
           <Taskathon>
-            <Menu setMenuOpen={setMenuOpen} darkMode={darkMode} setDarkMode={setDarkMode} />
+            <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} darkMode={darkMode} setDarkMode={setDarkMode} />
             <Container>
               <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} setSignUpOpen={setSignUpOpen} />
               <Routes>

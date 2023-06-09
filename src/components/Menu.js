@@ -59,9 +59,10 @@ display: none;
 `;
 
 // eslint-disable-next-line react/prop-types
-const Menu = ({ darkMode, setDarkMode, setMenuOpen }) => {
+const Menu = ({ menuOpen, setMenuOpen, darkMode, setDarkMode }) => {
   return (
-    <MenuContainer>
+    <>
+    {menuOpen && (<MenuContainer>
       <Name>
         TASKATHON
       </Name>
@@ -86,6 +87,8 @@ const Menu = ({ darkMode, setDarkMode, setMenuOpen }) => {
         </Elements>
       )}
     </MenuContainer>
+  )}
+  </>
   );
 };
 
