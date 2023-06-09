@@ -19,7 +19,7 @@ const Taskathon = styled.div`
   height: 100vh;
   background: ${({ theme }) => theme.bgLight};
   overflow-y: hidden;
-  overflow-x: scroll;
+  overflow-x: hidden;
 `;
 const Container = styled.div`
   display: flex;
